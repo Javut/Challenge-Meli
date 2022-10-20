@@ -1,0 +1,9 @@
+@import "../../../styles/function";
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
+
+.container{
+    @include gridWidth();
+    background: $color-white;
+    margin: auto;
+  }

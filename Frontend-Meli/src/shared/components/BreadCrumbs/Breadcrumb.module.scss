@@ -1,0 +1,14 @@
+@import "../../../styles/function";
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
+
+.container{
+    text-align: left;
+    margin: 0 auto;
+    height: 80vh;
+    padding-top: rem(16px);
+    padding-bottom: rem(16px);
+    background-color: $color-gray-light;
+    color: $color-gray-medium;
+    word-spacing: 5px;
+  }

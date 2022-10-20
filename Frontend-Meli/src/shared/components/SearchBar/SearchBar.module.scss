@@ -1,0 +1,81 @@
+@import "../../../styles/function";
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
+
+.container{
+  width: 100%;
+  height: rem(60px);
+  background: yellow;
+
+}
+
+  .wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin: auto;
+    box-sizing: border-box;
+  }
+
+    .logo{
+      width: rem(60px);
+      height: auto;
+      align-self: center;
+      margin-right: rem(32px);
+      padding-left: rem(32px);
+    }
+
+    .search_form{
+      width: 100%;
+      height: rem(40px);
+      position: relative;    
+      box-sizing: inherit;
+      display: flex;
+    }
+
+      .input{
+        border: $search-border;
+        border-radius: rem(2px);
+        box-sizing: inherit;
+        width: 90%;
+        height: 100%;
+        border-radius: 20px;
+        padding-left: rem(15px);
+        object-fit: fill;
+        @include fontSize(18px);
+      }
+  
+    //     &:focus{
+    //       @include accesibleFocus();
+    //     }
+    //   }
+
+      .submit{
+        position: absolute;
+        top: 0;
+        right: 10%;
+        padding: 0 rem(5px) 0 0;
+        border: none;
+        height: 100%;
+        min-width: rem(50px);
+        background: $color-gray-light;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer; 
+
+        &:focus{
+          @include accesibleFocus();
+        }
+
+        & img{
+          width: 50%;
+          height: 50%;
+          padding-left: rem(10px);
+        }
+
+      }
+    // }
+
+  // }
+// };
