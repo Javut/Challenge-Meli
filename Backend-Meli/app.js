@@ -75,25 +75,31 @@ items: [
 }
 
 
-fetch("https://api.mercadolibre.com/sites/MLA/search?q=celular")
-    .then((respuesta) => {
-        return respuesta.json()
-    }).then((resp) => {
-            BD.categories.push(resp.filters[0].values[0].path_from_root[0].name);
-            for(let i = 0; i < 4 ; i++) {
-                BD.items[i].id = resp.results[i].id;
-                BD.items[i].title = resp.results[i].title;
-                BD.items[i].price.currency = resp.results[i].prices.prices[0].currency_id;
-                BD.items[i].price.amount = resp.results[i].prices.prices[0].amount;
-                BD.items[i].price.decimals = resp.results[i].prices.prices[0].amount;
-                BD.items[i].picture = resp.results[i].thumbnail;
-                BD.items[i].condition = resp.results[i].condition;
-                BD.items[i].free_shipping = resp.results[i].shipping.free_shipping;
-                BD.items[i].sold_quantity = resp.results[i].sold_quantity;
-
+const recoveryData = async (query) => {
+    
+    fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${query}`)
+        .then((respuesta) => {
+            return respuesta.json()
+        }).then((resp) => {
+            //    resp.available_filters[0].values.map(categoryObject => BD.categories.push(categoryObject.name))
+            //    resp.available_filters[0].values.map(categoryObject => console.log(categoryObject.name))
+                for(let i = 0; i < 4 ; i++) {
+                    BD.items[i].id = resp.results[i].id;
+                    BD.items[i].title = resp.results[i].title;
+                    BD.items[i].price.currency = resp.results[i].prices.prices[0].currency_id;
+                    BD.items[i].price.amount = resp.results[i].prices.prices[0].amount;
+                    BD.items[i].price.decimals = resp.results[i].prices.prices[0].amount;
+                    BD.items[i].picture = resp.results[i].thumbnail;
+                    BD.items[i].condition = resp.results[i].condition;
+                    BD.items[i].free_shipping = resp.results[i].shipping.free_shipping;
+                    BD.items[i].sold_quantity = resp.results[i].sold_quantity;
+    
+                    
+                }
                 
-            }
-    })
+        })
+
+}
 
     fetch("https://api.mercadolibre.com/items/MLA916798816/description")
     .then((respuesta) => {
@@ -106,16 +112,22 @@ fetch("https://api.mercadolibre.com/sites/MLA/search?q=celular")
     })
 
 
-
-app.get('/', (req, res) => {
+app.get('/prueba', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE');
+  res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
   res.send('Hello World!')
   console.log(BD);
 })
 
 var result1="1";
-app.get('/api/items', (req,res)  => {
+app.get('/api/items', async (req,res)  => {
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE');
+    res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
     console.log("Este es mi Query params: "+ req.query.q);
     let query = req.query.q
+    await recoveryData(query);
     res.set('content-type', 'application/json');
     let salida = {"author":BD.author,categories:BD.categories,"items":[]};
     for(let i = 0; i<BD.items.length;i++){
