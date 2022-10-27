@@ -1,8 +1,10 @@
 import React from 'react'
 import styles from './SearchPage.module.scss';
 import Search from '../../components/SearchBar/SearchBar'
+import {useItemListContext} from '../../../context/ItemListContext'
 
 const SearchPage = () => {
+
   return (
     <div>
         <Search/>
