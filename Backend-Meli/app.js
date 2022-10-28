@@ -1,6 +1,6 @@
 const express = require('express');
-const fetch = (url) => 
-    import('node-fetch').then(({default: fetch}) => fetch(url));
+const fetch = (url) =>
+    import('node-fetch').then(({ default: fetch }) => fetch(url));
 // import express from 'express';
 
 // import fetch from 'node-fetch';
@@ -9,165 +9,195 @@ const port = 3000
 
 
 let BD = {
-author: {
-"name": "Jaider",
-"lastname": "Vergara" },
-categories: [],
-items: [
-    {
-        "id": "PROD001",
-        "title": "Telefono Motorola V3",
-        "price": {
-            "currency": "AR",
-            "amount": 10,
-            "decimals": 199
-        },
-        "picture": "http://",
-        "condition": "New",
-        "free_shipping": false,
-        "sold_quantity": 0,
-        "description": "Celular smartphone"
+    author: {
+        "name": "Jaider",
+        "lastname": "Vergara"
     },
-    {
-        "id": "PROD002",
-        "title": "iPHONE 12 Apple",
-         "price": {
-            "currency": "AR",
-            "amount": 1234,
-            "decimals": 4412
+    categories: [],
+    items: [
+        {
+            "id": "PROD001",
+            "title": "Telefono Motorola V3",
+            "price": {
+                "currency": "AR",
+                "amount": 10,
+                "decimals": 199
+            },
+            "picture": "http://",
+            "condition": "New",
+            "free_shipping": false,
+            "sold_quantity": 0,
+            "description": "Celular smartphone"
         },
-        "picture": "http://",
-        "condition": "New",
-        "free_shipping": false,
-        "sold_quantity": 0,
-        "description": "Celular smartphone"
-    },
-    {
-        "id": "PROD003",
-        "title": "Macbook Pro 13",
-         "price": {
-            "currency": "AR",
-            "amount": 124334,
-            "decimals": 44112
+        {
+            "id": "PROD002",
+            "title": "iPHONE 12 Apple",
+            "price": {
+                "currency": "AR",
+                "amount": 1234,
+                "decimals": 4412
+            },
+            "picture": "http://",
+            "condition": "New",
+            "free_shipping": false,
+            "sold_quantity": 0,
+            "description": "Celular smartphone"
         },
-        "picture": "http://",
-        "condition": "New",
-        "free_shipping": false,
-        "sold_quantity": 0,
-        "description": "Celular smartphone"
-    },
-    {
-        "id": "PROD004",
-        "title": "Samsung Galaxy 13",
-         "price": {
-            "currency": "AR",
-            "amount": 41234,
-            "decimals": 412
+        {
+            "id": "PROD003",
+            "title": "Macbook Pro 13",
+            "price": {
+                "currency": "AR",
+                "amount": 124334,
+                "decimals": 44112
+            },
+            "picture": "http://",
+            "condition": "New",
+            "free_shipping": false,
+            "sold_quantity": 0,
+            "description": "Celular smartphone"
         },
-        "picture": "http://",
-        "condition": "New",
-        "free_shipping": false,
-        "sold_quantity": 0,
-        "description": "Celular smartphone"
-    }
-    
+        {
+            "id": "PROD004",
+            "title": "Samsung Galaxy 13",
+            "price": {
+                "currency": "AR",
+                "amount": 41234,
+                "decimals": 412
+            },
+            "picture": "http://",
+            "condition": "New",
+            "free_shipping": false,
+            "sold_quantity": 0,
+            "description": "Celular smartphone"
+        }
+
     ]
 }
 
 
-const recoveryData = async (query) => {
-    
+const recoveryData = (query, call) => {
+
     fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${query}`)
         .then((respuesta) => {
             return respuesta.json()
         }).then((resp) => {
-            //    resp.available_filters[0].values.map(categoryObject => BD.categories.push(categoryObject.name))
+            resp.available_filters[0].values.map(categoryObject => BD.categories.push(categoryObject.name))
             //    resp.available_filters[0].values.map(categoryObject => console.log(categoryObject.name))
-                for(let i = 0; i < 4 ; i++) {
-                    BD.items[i].id = resp.results[i].id;
-                    BD.items[i].title = resp.results[i].title;
-                    BD.items[i].price.currency = resp.results[i].prices.prices[0].currency_id;
-                    BD.items[i].price.amount = resp.results[i].prices.prices[0].amount;
-                    BD.items[i].price.decimals = resp.results[i].prices.prices[0].amount;
-                    BD.items[i].picture = resp.results[i].thumbnail;
-                    BD.items[i].condition = resp.results[i].condition;
-                    BD.items[i].free_shipping = resp.results[i].shipping.free_shipping;
-                    BD.items[i].sold_quantity = resp.results[i].sold_quantity;
-    
-                    
-                }
-                
+            for (let i = 0; i < 4; i++) {
+                BD.items[i].id = resp.results[i].id;
+                BD.items[i].title = resp.results[i].title;
+                BD.items[i].price.currency = resp.results[i].prices.prices[0].currency_id;
+                BD.items[i].price.amount = resp.results[i].prices.prices[0].amount;
+                BD.items[i].price.decimals = resp.results[i].prices.prices[0].amount;
+                BD.items[i].picture = resp.results[i].thumbnail;
+                BD.items[i].condition = resp.results[i].condition;
+                BD.items[i].free_shipping = resp.results[i].shipping.free_shipping;
+                BD.items[i].sold_quantity = resp.results[i].sold_quantity;
+
+
+            }
+            //call(BD);
+            call(); //El que hace el reverso del llamado, cuando ya termino que se devuelva a donde se llamo
+
         })
 
 }
 
-    fetch("https://api.mercadolibre.com/items/MLA916798816/description")
-    .then((respuesta) => {
-        return respuesta.json()
-    }).then((resp) => {
-        for(let i = 0; i < 4 ; i++) {
-            BD.items[i].description = resp.plain_text      
-        }
+const recoveryDescription = (idparam, call) => {
 
-    })
+    fetch(`https://api.mercadolibre.com/items/${idparam}/description`)
+        .then((respuesta) => {
+            return respuesta.json()
+        }).then((resp) => {
+            for (let i = 0; i < 4; i++) {
+                if (BD.items[i].id == idparam) {
+                    console.log("Aqui deberia guardar esta info");
+                    BD.items[i].description = resp.plain_text
+                } else {
+                    console.log("No corresponde");
+                }
+            }
+
+            call();
+
+        })
+
+}
+
+
 
 
 app.get('/prueba', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin','*');
-  res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE');
-  res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
-  res.send('Hello World!')
-  console.log(BD);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+    res.setHeader('Access-Control-Allow-Methods', 'Content-Type', 'Authorization');
+    res.send('Hello World!')
+    console.log(BD);
 })
 
-var result1="1";
-app.get('/api/items', async (req,res)  => {
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE');
-    res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
-    console.log("Este es mi Query params: "+ req.query.q);
+var result1 = "1";
+app.get('/api/items', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+    res.setHeader('Access-Control-Allow-Methods', 'Content-Type', 'Authorization');
+    console.log("Este es mi Query params: " + req.query.q);
     let query = req.query.q
-    await recoveryData(query);
-    res.set('content-type', 'application/json');
-    let salida = {"author":BD.author,categories:BD.categories,"items":[]};
-    for(let i = 0; i<BD.items.length;i++){
-        if(BD.items[i].title.toLowerCase().indexOf(query)<0){
+
+    recoveryData(query, function () { //Bloquea el hilo hasta tener la respuesta de la funcion recoveryData
+        res.set('content-type', 'application/json');
+        let salida = { "author": BD.author, categories: BD.categories, "items": [] };
+        for (let i = 0; i < BD.items.length; i++) {
             console.log("lo encontro")
-            salida['items'].push({"id":BD.items[i].id,"title":BD.items[i].title,"price":BD.items[i].price,"picture":BD.items[i].picture,"condtion":BD.items[i].condition,"free_shipping":BD.items[i].free_shipping})
+            salida['items'].push({ "id": BD.items[i].id, "title": BD.items[i].title, "price": BD.items[i].price, "picture": BD.items[i].picture, "condtion": BD.items[i].condition, "free_shipping": BD.items[i].free_shipping })
+
         }
-    }
-    res.send(salida)
-    
+        res.send(salida)
+    });
+
+
+
 })
 const getProduct = (_id) => {
-    let salida = {"author":BD.author};
-    for(let i = 0;i<BD.items.length;i++){
-        if(BD.items[i].id.toLowerCase()==_id.toLowerCase()){
-           salida['item'] = BD.items[i]
-           break;
+    let result = { "author": BD.author };
+    for (let i = 0; i < BD.items.length; i++) {
+        if (BD.items[i].id.toLowerCase() == _id.toLowerCase()) {
+            result['item'] = BD.items[i]
+            console.log("Si corresponde");
+            return (result)
+            break;
         }
     }
-    return(salida)
+
+    return 'El id no corresponde';
+
 }
 
-app.get('/api/items/:id', (req,res)  => {
+app.get('/api/items/:id', (req, res) => {
     res.set('content-type', 'application/json');
-    for(let x = 0;x<BD.items.length;x++){
+    for (let x = 0; x < BD.items.length; x++) {
         console.log("Aqui entre en el api/items")
-        if(BD.items[x].id == req.params.id){
+        if (BD.items[x].id == req.params.id) {
             console.log("Hola soy igual a: " + req.params.id)
             res.send(getProduct(req.params.id))
-        }else{
+        } else {
             res.send("No se ha podido encontrar el ID")
         }
     }
 })
 
-app.get('/api/items/:id/description', (req,res)  => {
+app.get('/api/items/:id/description', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+    res.setHeader('Access-Control-Allow-Methods', 'Content-Type', 'Authorization');
     res.set('content-type', 'application/json');
-    res.send(getProduct(req.params.id))
+    // res.send('Prueba para description')
+    console.log(req.params.id);
+    recoveryDescription(req.params.id, function (){
+        res.send(getProduct(req.params.id))
+    })
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${port}`)
 })
